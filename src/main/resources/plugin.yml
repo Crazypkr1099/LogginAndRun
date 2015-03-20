@@ -1,0 +1,16 @@
+name: TestPlugin
+main: com.crazypkr.testplugin.TestPlugin
+version: 0.1
+
+commands:
+  test:
+    description: This is a demo command.
+    usage: /<test>
+    permission: testplugin.owner
+    
+
+permissions:
+	testplugin.manager
+	  description: Testing for permissions.
+	  default: op
+	
