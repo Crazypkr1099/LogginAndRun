@@ -8,9 +8,11 @@ commands:
     usage: /<test>
     permission: testplugin.owner
     
-
 permissions:
-	testplugin.manager
-	  description: Testing for permissions.
-	  default: op
-	
+    testplugin.manager:
+        description: DimRestrictor managers
+        default: op
+    testplugin.owner:
+        description: Users with this permission will bypass the restriction
+        default: op
+
