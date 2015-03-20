@@ -7,7 +7,6 @@ commands:
     description: This is a demo command.
     usage: /<test>
     permission: testplugin.owner
-    
 permissions:
     testplugin.manager:
         description: DimRestrictor managers
