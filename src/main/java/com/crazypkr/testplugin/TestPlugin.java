@@ -37,9 +37,10 @@ public final class TestPlugin extends JavaPlugin {
 				ArrayList<String> usersCommands = userCommands.get(player.getUniqueId());
 				if (usersCommands == null){
 					usersCommands = new ArrayList<String>();
+					userCommands.put(player.getUniqueId(),usersCommands);
 				}
+				
 				usersCommands.add(ustrcommand);
-				userCommands.put(player.getUniqueId(),usersCommands);
 				player.sendMessage("Added " + usersCommands + "on startup!");
 			}
 		}
