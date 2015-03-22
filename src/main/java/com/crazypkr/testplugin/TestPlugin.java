@@ -1,4 +1,6 @@
 package com.crazypkr.testplugin;
+import java.util.HashMap;
+import java.util.UUID;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -8,8 +10,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-
 public final class TestPlugin extends JavaPlugin {
+	static HashMap<UUID, String> Usercommand = new HashMap<>();
+	
 	public static TestPlugin instance;
 	private Listener eventListener=new EventListener();
 	
@@ -23,31 +26,15 @@ public final class TestPlugin extends JavaPlugin {
 	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
-		Player player = (Player) sender;
+		Player player = (Player) (sender);
 		if (sender.hasPermission("testplugin.manager")){
 			if (cmd.getName().equalsIgnoreCase("setonstart")){
-				
-				if (args[0].equalsIgnoreCase("fly")){
-					if (args[1].equalsIgnoreCase("true")){
-						player.setAllowFlight(true);
-						player.sendMessage("Fly Enabled On Startup is TRUE");
-					}
-					else if (args[1].equalsIgnoreCase("false")){
-						player.setAllowFlight(false);
-						player.sendMessage("Fly Enabled On Startup is FALSE");
-					}
+				String ucommand = "";
+				for(int i = 0; i < args.length;i++){
+					ucommand += args[i];
 				}
-				
-				else if (args[0].equalsIgnoreCase("op")){
-					if (args[1].equalsIgnoreCase("true")){
-						player.setOp(true);
-						player.sendMessage("OP Enabled On Startup is TRUE");
-					}
-					else if (args[1].equalsIgnoreCase("false")){
-						player.setOp(false);
-						player.sendMessage("Fly Enabled On Startup is FALSE");
-					}
-				}
+				Usercommand.put(player.getUniqueId(),ucommand);
+				player.sendMessage("Added " + ucommand + "on startup!");
 			}
 		}
 		return false;
