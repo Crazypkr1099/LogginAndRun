@@ -14,4 +14,3 @@ permissions:
     testplugin.owner:
         description: Users with this permission will bypass the restriction
         default: op
-
