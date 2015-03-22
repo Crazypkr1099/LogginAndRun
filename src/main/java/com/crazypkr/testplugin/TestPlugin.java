@@ -1,6 +1,6 @@
 package com.crazypkr.testplugin;
-import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -11,7 +11,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class TestPlugin extends JavaPlugin {
-	static HashMap<UUID, String> Usercommand = new HashMap<>();
+	static ConcurrentHashMap<UUID, String> Usercommand = new ConcurrentHashMap<>();
 	
 	public static TestPlugin instance;
 	private Listener eventListener=new EventListener();
