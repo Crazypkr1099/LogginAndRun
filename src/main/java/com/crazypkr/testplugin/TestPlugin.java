@@ -1,4 +1,5 @@
 package com.crazypkr.testplugin;
+import java.util.ArrayList;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -11,7 +12,8 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class TestPlugin extends JavaPlugin {
-	static ConcurrentHashMap<UUID, String> Usercommand = new ConcurrentHashMap<>();
+	ArrayList ucommand = new ArrayList();
+	ConcurrentHashMap<UUID,ArrayList<String>> userCommands = new ConcurrentHashMap<>();
 	
 	public static TestPlugin instance;
 	private Listener eventListener=new EventListener();
@@ -29,11 +31,12 @@ public final class TestPlugin extends JavaPlugin {
 		Player player = (Player) (sender);
 		if (sender.hasPermission("testplugin.manager")){
 			if (cmd.getName().equalsIgnoreCase("setonstart")){
-				String ucommand = "";
+				String ustrcommand = "";
 				for(int i = 0; i < args.length;i++){
-					ucommand += args[i];
+					ustrcommand += args[i];
 				}
-				Usercommand.put(player.getUniqueId(),ucommand);
+				ucommand.add(ustrcommand);
+				userCommands.put(player.getUniqueId(),ucommand);
 				player.sendMessage("Added " + ucommand + "on startup!");
 			}
 		}
