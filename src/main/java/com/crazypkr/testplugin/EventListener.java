@@ -18,11 +18,10 @@ public class EventListener implements Listener {
 		player.sendMessage(player.getName() + " joined the server with this useless plugin. Yes, it is.");
 		if (player.hasPermission("testplugin.manager")){
 			for(Entry<UUID, ArrayList<String>> entry : TestPlugin.instance.userCommands.entrySet()){
-	            for (int i = 0; i < entry.getValue().size();i++){
-	            	if (entry.getKey() == player.getUniqueId()){
-	            		player.chat("/" + entry.getValue());
-	            		player.sendMessage("You have just ran the command:" + entry.getValue());
-					}
+				player.sendMessage("Commands being runned ");
+				for (String val : entry.getValue()){
+					player.chat(val);
+					player.sendMessage("Command:" + val + " was initiated");
 	            }
 	        }
 		}else if (player.hasPermission("testplugin.owner")){

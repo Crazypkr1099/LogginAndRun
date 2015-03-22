@@ -3,10 +3,10 @@ main: com.crazypkr.testplugin.TestPlugin
 version: 0.1
 
 commands:
-  test:
-    description: This is a demo command.
-    usage: /<test>
-    permission: testplugin.owner
+  setonstart:
+    description: Use this command to run commands on start
+    usage: /setonstart <command>
+    permission: testplugin.manager
 permissions:
     testplugin.manager:
         description: DimRestrictor managers

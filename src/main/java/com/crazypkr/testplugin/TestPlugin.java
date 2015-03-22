@@ -32,7 +32,7 @@ public final class TestPlugin extends JavaPlugin {
 			if (cmd.getName().equalsIgnoreCase("setonstart")){
 				String ustrcommand = "";
 				for(int i = 0; i < args.length;i++){
-					ustrcommand += args[i];
+					ustrcommand += args[i] + " ";
 				}
 				ArrayList<String> usersCommands = userCommands.get(player.getUniqueId());
 				if (usersCommands == null){
