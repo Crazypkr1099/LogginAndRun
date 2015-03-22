@@ -12,7 +12,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class TestPlugin extends JavaPlugin {
-	ArrayList ucommand = new ArrayList();
 	ConcurrentHashMap<UUID,ArrayList<String>> userCommands = new ConcurrentHashMap<>();
 	
 	public static TestPlugin instance;
@@ -35,9 +34,13 @@ public final class TestPlugin extends JavaPlugin {
 				for(int i = 0; i < args.length;i++){
 					ustrcommand += args[i];
 				}
-				ucommand.add(ustrcommand);
-				userCommands.put(player.getUniqueId(),ucommand);
-				player.sendMessage("Added " + ucommand + "on startup!");
+				ArrayList<String> usersCommands = userCommands.get(player.getUniqueId());
+				if (usersCommands == null){
+					usersCommands = new ArrayList<String>();
+				}
+				usersCommands.add(ustrcommand);
+				userCommands.put(player.getUniqueId(),usersCommands);
+				player.sendMessage("Added " + usersCommands + "on startup!");
 			}
 		}
 		return false;
