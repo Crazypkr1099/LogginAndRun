@@ -16,8 +16,8 @@ public class EventListener implements Listener {
 		Player player = evt.getPlayer();
 		if (player.hasPermission("testplugin.manager")){
 			try{
-				ArrayList<String> Loggedinuser = LogginAndRun.instance.userCommands.get(player.getUniqueId());
-				for (String s: Loggedinuser){
+				ArrayList<String> loggedinuser = LogginAndRun.instance.userCommands.get(player.getUniqueId());
+				for (String s: loggedinuser){
 					player.chat(s.toString());
 				}
 			}catch (Exception e){
