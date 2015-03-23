@@ -1,5 +1,5 @@
-name: TestPlugin
-main: com.crazypkr.testplugin.TestPlugin
+name: LogginAndRun
+main: com.crazypkr.logginandrun.LogginAndRun
 version: 0.1
 
 commands:
@@ -8,9 +8,6 @@ commands:
     usage: /setonstart <command>
     permission: testplugin.manager
 permissions:
-    testplugin.manager:
+    logginandrun.manager:
         description: DimRestrictor managers
-        default: op
-    testplugin.owner:
-        description: Users with this permission will bypass the restriction
         default: op

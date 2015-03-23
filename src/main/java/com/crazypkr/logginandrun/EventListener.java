@@ -1,4 +1,4 @@
-package com.crazypkr.testplugin;
+package com.crazypkr.logginandrun;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -13,11 +13,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 public class EventListener implements Listener {
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent evt){
-		TestPlugin.instance.getServer().getLogger().info("onPlayerJoin triggered.");
 		Player player = evt.getPlayer();
 		player.sendMessage(player.getName() + " joined the server with this useless plugin. Yes, it is.");
 		if (player.hasPermission("testplugin.manager")){
-			for(Entry<UUID, ArrayList<String>> entry : TestPlugin.instance.userCommands.entrySet()){
+			for(Entry<UUID, ArrayList<String>> entry : LogginAndRun.instance.userCommands.entrySet()){
 				player.sendMessage("Commands being runned ");
 				for (String val : entry.getValue()){
 					player.chat(val);

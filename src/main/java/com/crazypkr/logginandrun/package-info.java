@@ -6,4 +6,4 @@
  *
  */
 
-package com.crazypkr.testplugin;
+package com.crazypkr.logginandrun;
