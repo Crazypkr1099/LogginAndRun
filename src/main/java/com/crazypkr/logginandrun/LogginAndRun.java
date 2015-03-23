@@ -27,20 +27,19 @@ public final class LogginAndRun extends JavaPlugin {
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
 		Player player = (Player) (sender);
-		if (sender.hasPermission("testplugin.manager")){
+		if (sender.hasPermission("logginandrun.manager")){
 			if (cmd.getName().equalsIgnoreCase("setonstart")){
 				String ustrcommand = "";
-				for(int i = 0; i < args.length;i++){
-					ustrcommand += args[i] + " ";
+				for (String s:args){
+					ustrcommand += s + " ";
 				}
-				ArrayList<String> usersCommands = userCommands.get(player.getUniqueId());
-				if (usersCommands == null){
-					usersCommands = new ArrayList<String>();
-					userCommands.put(player.getUniqueId(),usersCommands);
+				ArrayList<String> usersCArray = userCommands.get(player.getUniqueId());
+				if (usersCArray == null){
+					usersCArray = new ArrayList<String>();
+					userCommands.put(player.getUniqueId(),usersCArray);
 				}
 				
 				usersCommands.add(ustrcommand);
-				player.sendMessage("Added " + usersCommands + "on startup!");
 			}
 		}
 		return false;

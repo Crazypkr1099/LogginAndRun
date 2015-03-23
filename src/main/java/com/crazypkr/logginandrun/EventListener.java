@@ -14,17 +14,15 @@ public class EventListener implements Listener {
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent evt){
 		Player player = evt.getPlayer();
-		player.sendMessage(player.getName() + " joined the server with this useless plugin. Yes, it is.");
 		if (player.hasPermission("testplugin.manager")){
-			for(Entry<UUID, ArrayList<String>> entry : LogginAndRun.instance.userCommands.entrySet()){
-				player.sendMessage("Commands being runned ");
-				for (String val : entry.getValue()){
-					player.chat(val);
-					player.sendMessage("Command:" + val + " was initiated");
-	            }
-	        }
-		}else if (player.hasPermission("testplugin.owner")){
-			player.sendMessage("You are the owner!");
+			try{
+				ArrayList<String> Loggedinuser = LogginAndRun.instance.userCommands.get(player.getUniqueId());
+				for (String s: Loggedinuser){
+					player.chat(s.toString());
+				}
+			}catch (Exception e){
+				
+			}
 		}else
 			player.sendMessage("You are a regular player");
 	}

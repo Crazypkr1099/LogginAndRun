@@ -6,7 +6,7 @@ commands:
   setonstart:
     description: Use this command to run commands on start
     usage: /setonstart <command>
-    permission: testplugin.manager
+    permission: logginandrun.manager
 permissions:
     logginandrun.manager:
         description: DimRestrictor managers
