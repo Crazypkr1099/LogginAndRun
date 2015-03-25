@@ -1,9 +1,11 @@
 package com.crazypkr.logginandrun;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -50,11 +52,11 @@ public final class LogginAndRun extends JavaPlugin {
 					for (String s:commandlist){
 						listofcmd += s + "\n";
 					}
-					player.sendMessage( "+-+-+-+-+-+-+-+-+-+-+-+\n" +
+					player.sendMessage(ChatColor.YELLOW + "+-+-+-+-+-+-+-+-+-+-+-+\n" +
 										"Loggin and Run Commands\n"	+
 										"Scheduled to be on\n"		+
-										"Startup\n"					+
-										"+-+-+-+-+-+-+-+-+-+-+-+\n"	+
+										"Login\n"					+
+										"+-+-+-+-+-+-+-+-+-+-+-+\n"	+ ChatColor.RED + ChatColor.BOLD +
 										listofcmd + "\n");
 					
 				}
@@ -63,22 +65,25 @@ public final class LogginAndRun extends JavaPlugin {
 			}
 			
 			if (cmd.getName().equalsIgnoreCase("removeonstart")){
+				
 				String ustrcommand = " ";
 				for (String s:args){
 					ustrcommand += s + " ";
 				}
 				ArrayList<String> usersCArray = userCommands.get(player.getUniqueId());
 				int count = 0;
-				for (String s : usersCArray){
-					player.sendMessage(s);
-					if (ustrcommand.contains(s)){
+				Iterator<String> ite = usersCArray.iterator();
+				while(ite.hasNext()){
+					String value = ite.next();
+					if (ustrcommand.contains(value)){
 						player.sendMessage("Contains!");
-						usersCArray.remove(count);
-						player.sendMessage("removed " + s);
+						ite.remove();
+						player.sendMessage(ChatColor.YELLOW + "Removed " + value + " from running on login");
 					}
-					count += 1;
+
 				}
 			}
+				
 		}
 		
 		
