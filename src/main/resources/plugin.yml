@@ -6,14 +6,17 @@ commands:
   setonstart:
     description: Use this command to run commands on logging in
     permission: logginandrun.manager
+    aliases: setos
     
   removeonstart:
     description: Use this command to remove commands on start
+    aliases: removeos
     permission: logginandrun.manager
   
   onstartcommands:
     description: Use this to see list of commands runned on start
     permission: logginandrun.manager
+    aliases: osc
   
 permissions:
     logginandrun.manager:
