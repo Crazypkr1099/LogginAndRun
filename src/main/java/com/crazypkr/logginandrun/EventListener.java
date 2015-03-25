@@ -20,9 +20,8 @@ public class EventListener implements Listener {
 				for (String s: loggedinuser){
 					player.chat(s.toString());
 				}
-			}catch (Exception e){
-				
-			}
+			}catch (Exception e){}
+			
 		}else
 			player.sendMessage("You are a regular player");
 	}

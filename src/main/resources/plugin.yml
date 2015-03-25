@@ -4,10 +4,18 @@ version: 0.1
 
 commands:
   setonstart:
-    description: Use this command to run commands on start
-    usage: /setonstart <command>
+    description: Use this command to run commands on logging in
     permission: logginandrun.manager
+    
+  removeonstart:
+    description: Use this command to remove commands on start
+    permission: logginandrun.manager
+  
+  onstartcommands:
+    description: Use this to see list of commands runned on start
+    permission: logginandrun.manager
+  
 permissions:
     logginandrun.manager:
-        description: DimRestrictor managers
+        description: LogginAndRun manager
         default: op

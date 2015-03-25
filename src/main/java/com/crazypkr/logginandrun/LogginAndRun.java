@@ -1,5 +1,6 @@
 package com.crazypkr.logginandrun;
 import java.util.ArrayList;
+import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -39,9 +40,48 @@ public final class LogginAndRun extends JavaPlugin {
 					userCommands.put(player.getUniqueId(),usersCArray);
 				}
 				
-				usersCommands.add(ustrcommand);
+				usersCArray.add(ustrcommand);
+			}
+			
+			if (cmd.getName().equalsIgnoreCase("onstartcommands")){
+				try{
+					ArrayList<String> commandlist = userCommands.get(player.getUniqueId());
+					String listofcmd = "";
+					for (String s:commandlist){
+						listofcmd += s + "\n";
+					}
+					player.sendMessage( "+-+-+-+-+-+-+-+-+-+-+-+\n" +
+										"Loggin and Run Commands\n"	+
+										"Scheduled to be on\n"		+
+										"Startup\n"					+
+										"+-+-+-+-+-+-+-+-+-+-+-+\n"	+
+										listofcmd + "\n");
+					
+				}
+				
+				catch (Exception e){}
+			}
+			
+			if (cmd.getName().equalsIgnoreCase("removeonstart")){
+				String ustrcommand = " ";
+				for (String s:args){
+					ustrcommand += s + " ";
+				}
+				ArrayList<String> usersCArray = userCommands.get(player.getUniqueId());
+				int count = 0;
+				for (String s : usersCArray){
+					player.sendMessage(s);
+					if (ustrcommand.contains(s)){
+						player.sendMessage("Contains!");
+						usersCArray.remove(count);
+						player.sendMessage("removed " + s);
+					}
+					count += 1;
+				}
 			}
 		}
+		
+		
 		return false;
 	}
 }
