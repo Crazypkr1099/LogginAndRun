@@ -3,10 +3,10 @@ main: com.crazypkr.logginandrun.LogginAndRun
 version: 0.1
 
 commands:
-  setonstart:
+  onstart:
     description: Use this command to run commands on logging in
     permission: logginandrun.manager
-    aliases: setos
+    aliases: os
     
   removeonstart:
     description: Use this command to remove commands on start
