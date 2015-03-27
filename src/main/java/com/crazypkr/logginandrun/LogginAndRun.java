@@ -19,65 +19,68 @@ public final class LogginAndRun extends JavaPlugin {
 	private Listener eventListener=new EventListener();
 	
 	public void onEnable() {
+		FileHandler.fileHandlerInstance.LogginAndRunLoadData();
 		instance=this;
 		
-
+		// Registers ability to use Permission
 		PluginManager pm = this.getServer().getPluginManager();
 		pm.registerEvents(this.eventListener, this);
 	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
-		Player player = (Player) (sender);
-		ArrayList<String> usersCArray = userCommands.get(player.getUniqueId());
-		String ustrcommand = "";
-		String onoff = null;
-		if (sender.hasPermission("logginandrun.manager")){
-			if (cmd.getName().equalsIgnoreCase("onstart")){
-				for (int i = 0; i < args.length-1; i++){
-					ustrcommand += args[i] + " ";
+		Player player = (Player) (sender); // Initialize player method as sender
+		ArrayList<String> usersCArray = userCommands.get(player.getUniqueId()); // Creates an Array to store Users Commands
+		String uStrCommand = ""; // Initializes a variable to store commands users write
+		String onOff = null; // Initializes a variable to check if command is on or off
+		if (sender.hasPermission("logginandrun.manager")){ // If has perms...
+			if (cmd.getName().equalsIgnoreCase("onstart")){ 
+				for (int i = 0; i < args.length-1; i++){ // Grabs the command without the [on/off] at the end
+					uStrCommand += args[i] + " ";
 				}
 				
-				if (args[0].equalsIgnoreCase("on") || args[0].equalsIgnoreCase("off")){
-					if (usersCArray != null){
-						ArrayList<String> temp = new ArrayList<String>();
-						for (String s : usersCArray){
+				if (args[0].equalsIgnoreCase("on") || args[0].equalsIgnoreCase("off")){ // if equals /os on or off
+					if (usersCArray != null){ // If Array Exists
+						ArrayList<String> temp = new ArrayList<String>(); 
+						for (String s : usersCArray){ // Store all data in a temporary ArrayList
 							temp.add(s);
 						}
 						Iterator<String> ite = usersCArray.iterator();
 						while(ite.hasNext()){
+							@SuppressWarnings("unused")
 							String s = ite.next();
 							ite.remove();							
 						}
 						for (String s: temp){
 							player.sendMessage("hi");
-							ustrcommand = "";
-							String[] sstring = s.split(" ");
-							for (int i = 0; i < sstring.length-1; i++){
-								ustrcommand += sstring[i] + " ";
+							uStrCommand = "";
+							String[] splitString = s.split(" ");
+							for (int i = 0; i < splitString.length-1; i++){
+								uStrCommand += splitString[i] + " ";
 							}
-							player.sendMessage(sstring[sstring.length-1]);
+							player.sendMessage(splitString[splitString.length-1]);
 							if (args[0].contains("on")){
-								usersCArray.add(ustrcommand + "on");
+								usersCArray.add(uStrCommand + "on");
 							}
 							else if (args[0].contains("off")){
-								usersCArray.add(ustrcommand + "off");
+								usersCArray.add(uStrCommand + "off");
 							}
 						}
 						temp.removeAll(temp);
+						FileHandler.fileHandlerInstance.LogginAndRunSaveData();
 					}
 					return false;
 				}
 				if (args[args.length-1].equalsIgnoreCase("on")){
-					onoff = "on";
+					onOff = "on";
 				}
 				else if (args[args.length-1].equalsIgnoreCase("off")){
-					onoff = "off";
+					onOff = "off";
 				}
 				else{
-					onoff = null;
+					onOff = null;
 				}
 				
-				if (onoff == null){
+				if (onOff == null){
 					player.sendMessage(ChatColor.RED + "Sorry, please use /onstart <cmd> <on/off> to toggle commands");
 				}
 				else{
@@ -86,40 +89,43 @@ public final class LogginAndRun extends JavaPlugin {
 						userCommands.put(player.getUniqueId(),usersCArray);
 					}
 					boolean check = true;
+					
 					for (String s : usersCArray){
-						if (s.contains(ustrcommand)){
-							String[] sstring = s.split(" ");
-							player.sendMessage(onoff + " " + sstring);
-							player.sendMessage(onoff.length() + " " + sstring[sstring.length-1].length());
-							if (onoff.contains(sstring[sstring.length-1])){
+						if (s.contains(uStrCommand)){
+							String[] splitString = s.split(" ");
+							player.sendMessage(onOff + " " + splitString);
+							player.sendMessage(onOff.length() + " " + splitString[splitString.length-1].length());
+							if (onOff.contains(splitString[splitString.length-1])){
 								player.sendMessage(ChatColor.RED + "Sorry, you already have this toggled on or off!");
 								check = false;
 							}
 						}
 					}
 					if (check == true){
-						if (onoff.equals("on")){
-							usersCArray.remove(ustrcommand + "off");
+						if (onOff.equals("on")){
+							usersCArray.remove(uStrCommand + "off");
 			
-							player.sendMessage(ChatColor.RED + "Toggled " + ustrcommand + "to run on login");
-							usersCArray.add(ustrcommand + "on");
+							player.sendMessage(ChatColor.RED + "Toggled " + uStrCommand + "to run on login");
+							usersCArray.add(uStrCommand + "on");
 							userCommands.put(player.getUniqueId(),usersCArray);
 						}
-						else if (onoff.equals("off")){
-							usersCArray.remove(ustrcommand + "on");
+						else if (onOff.equals("off")){
+							usersCArray.remove(uStrCommand + "on");
 							
-							player.sendMessage(ChatColor.RED + ustrcommand + "will not be ran on login");
-							usersCArray.add(ustrcommand + "off");
+							player.sendMessage(ChatColor.RED + uStrCommand + "will not be ran on login");
+							usersCArray.add(uStrCommand + "off");
 							userCommands.put(player.getUniqueId(),usersCArray);
+							
 						}
+						FileHandler.fileHandlerInstance.LogginAndRunSaveData();
 					}
 				}
 			}
 		}
 		
 		if (cmd.getName().equalsIgnoreCase("onstartcommands")){
-			ArrayList<String> commandlist = userCommands.get(player.getUniqueId());
-			if (commandlist == null || commandlist.size() == 0){
+			ArrayList<String> commandList = userCommands.get(player.getUniqueId());
+			if (commandList == null || commandList.size() == 0){
 				player.sendMessage(ChatColor.YELLOW + "+-+-+-+-+-+-+-+-+-+-+-+\n" +
 						ChatColor.RED + "Theres no commands being\n"	+
 						"ran on login\n"		+
@@ -131,16 +137,16 @@ public final class LogginAndRun extends JavaPlugin {
 			
 		
 			else{
-				String listofcmd = "";
-				for (String s:commandlist){
-					listofcmd += s + "\n";
+				String listOfCmd = "";
+				for (String s:commandList){
+					listOfCmd += s + "\n";
 				}
 				player.sendMessage(ChatColor.YELLOW + "+-+-+-+-+-+-+-+-+-+-+-+\n" +
 									"Loggin and Run Commands\n"	+
 									"Scheduled to be on\n"		+
 									"Login\n"					+
 									"+-+-+-+-+-+-+-+-+-+-+-+\n"	+ ChatColor.GREEN + ChatColor.BOLD +
-									listofcmd + "\n");
+									listOfCmd + "\n");
 			}
 		}
 		
