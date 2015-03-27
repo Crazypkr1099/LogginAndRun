@@ -18,7 +18,14 @@ public class EventListener implements Listener {
 			try{
 				ArrayList<String> loggedinuser = LogginAndRun.instance.userCommands.get(player.getUniqueId());
 				for (String s: loggedinuser){
-					player.chat(s.toString());
+					String uStrCommand = "";
+					String[] splitString = s.split(" ");
+					for (int i = 0; i < splitString.length-1; i++){
+						uStrCommand += splitString[i] + " ";
+					}
+					if (splitString[splitString.length-1].equalsIgnoreCase("on")){
+						player.chat(uStrCommand);
+					}
 				}
 			}catch (Exception e){}
 			

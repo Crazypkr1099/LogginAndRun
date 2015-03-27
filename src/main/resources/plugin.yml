@@ -4,20 +4,25 @@ version: 0.1
 
 commands:
   onstart:
-    description: Use this command to run commands on logging in
+    description: Commands to trigger on login permissions
     permission: logginandrun.manager
     aliases: os
     
   removeonstart:
     description: Use this command to remove commands on start
-    aliases: removeos
     permission: logginandrun.manager
+    aliases: osremove
   
   onstartcommands:
-    description: Use this to see list of commands runned on start
+    description: Use this to see list of commands ran on start
     permission: logginandrun.manager
     aliases: osc
-  
+    
+  logginandrun:
+    description: Help Commands for LogginAndRun Plugin
+    permission: logginandrun.manager
+    aliases: lar
+
 permissions:
     logginandrun.manager:
         description: LogginAndRun manager

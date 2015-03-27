@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -14,14 +13,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class LogginAndRun extends JavaPlugin {
 	ConcurrentHashMap<UUID,ArrayList<String>> userCommands = new ConcurrentHashMap<>();
-	
 	public static LogginAndRun instance;
 	private Listener eventListener=new EventListener();
 	
 	public void onEnable() {
-		FileHandler.fileHandlerInstance.LogginAndRunLoadData();
 		instance=this;
-		
+		FileHandler.fileHandlerInstance.LogginAndRunLoadData();
 		// Registers ability to use Permission
 		PluginManager pm = this.getServer().getPluginManager();
 		pm.registerEvents(this.eventListener, this);
@@ -32,13 +29,14 @@ public final class LogginAndRun extends JavaPlugin {
 		ArrayList<String> usersCArray = userCommands.get(player.getUniqueId()); // Creates an Array to store Users Commands
 		String uStrCommand = ""; // Initializes a variable to store commands users write
 		String onOff = null; // Initializes a variable to check if command is on or off
+		
 		if (sender.hasPermission("logginandrun.manager")){ // If has perms...
 			if (cmd.getName().equalsIgnoreCase("onstart")){ 
 				for (int i = 0; i < args.length-1; i++){ // Grabs the command without the [on/off] at the end
 					uStrCommand += args[i] + " ";
 				}
-				
-				if (args[0].equalsIgnoreCase("on") || args[0].equalsIgnoreCase("off")){ // if equals /os on or off
+				if (args[0].equalsIgnoreCase("on") || args[0].equalsIgnoreCase("clear") 
+						|| args[0].equalsIgnoreCase("off")){ // if equals /os on, off or clear
 					if (usersCArray != null){ // If Array Exists
 						ArrayList<String> temp = new ArrayList<String>(); 
 						for (String s : usersCArray){ // Store all data in a temporary ArrayList
@@ -50,14 +48,17 @@ public final class LogginAndRun extends JavaPlugin {
 							String s = ite.next();
 							ite.remove();							
 						}
+						if (args[0].equalsIgnoreCase("clear")){
+							temp.removeAll(temp);
+							player.sendMessage(ChatColor.RED + "Removed all commands to be ran on login");
+							return false;
+						}
 						for (String s: temp){
-							player.sendMessage("hi");
 							uStrCommand = "";
 							String[] splitString = s.split(" ");
 							for (int i = 0; i < splitString.length-1; i++){
 								uStrCommand += splitString[i] + " ";
 							}
-							player.sendMessage(splitString[splitString.length-1]);
 							if (args[0].contains("on")){
 								usersCArray.add(uStrCommand + "on");
 							}
@@ -93,8 +94,6 @@ public final class LogginAndRun extends JavaPlugin {
 					for (String s : usersCArray){
 						if (s.contains(uStrCommand)){
 							String[] splitString = s.split(" ");
-							player.sendMessage(onOff + " " + splitString);
-							player.sendMessage(onOff.length() + " " + splitString[splitString.length-1].length());
 							if (onOff.contains(splitString[splitString.length-1])){
 								player.sendMessage(ChatColor.RED + "Sorry, you already have this toggled on or off!");
 								check = false;
@@ -132,10 +131,7 @@ public final class LogginAndRun extends JavaPlugin {
 						ChatColor.GREEN + "Use /setonstart <cmd>\n" +
 						"to add a command\n" + 
 						ChatColor.YELLOW + "+-+-+-+-+-+-+-+-+-+-+-+\n");
-				
 				}
-			
-		
 			else{
 				String listOfCmd = "";
 				for (String s:commandList){
@@ -145,16 +141,25 @@ public final class LogginAndRun extends JavaPlugin {
 									"Loggin and Run Commands\n"	+
 									"Scheduled to be on\n"		+
 									"Login\n"					+
-									"+-+-+-+-+-+-+-+-+-+-+-+\n"	+ ChatColor.GREEN + ChatColor.BOLD +
+									"+-+-+-+-+-+-+-+-+-+-+-+\n"	+ ChatColor.GRAY 
+									+ ChatColor.ITALIC +
 									listOfCmd + "\n");
 			}
 		}
 		
-		
-		
+		if (cmd.getName().equalsIgnoreCase("logginandrun")){
+			player.sendMessage(ChatColor.YELLOW + "+-+-+-+-+-+-+-+-+-+-+-+\n" 			+
+					"Loggin and Run Commands\n"	+
+					"Help Commands\n"			+
+					"+-+-+-+-+-+-+-+-+-+-+-+\n"	+ ChatColor.GRAY 						+
+					"/lar - Shows commands users are able to run\n"						+
+					"/osc - Shows all commands toggleable\n"							+
+					"/os <cmd> <on/off> - Toggles Commands to be ran on log in\n"		+
+					"/os <on/off> - Toggles ALL Commands to be ran on log in\n"			+
+					"/os <clear> - Clears all your toggleable commands\n");	
+		}
 		
 		
 		return false;
 	}
 }
-					
