@@ -3,25 +3,20 @@ main: com.crazypkr.logginandrun.LogginAndRun
 version: 0.1
 
 commands:
-  onstart:
+  osenable:
     description: Commands to trigger on login permissions
     permission: logginandrun.manager
     aliases: os
     
-  removeonstart:
+  osdisable:
     description: Use this command to remove commands on start
     permission: logginandrun.manager
     aliases: osremove
   
-  onstartcommands:
+  oscommands:
     description: Use this to see list of commands ran on start
     permission: logginandrun.manager
     aliases: osc
-    
-  logginandrun:
-    description: Help Commands for LogginAndRun Plugin
-    permission: logginandrun.manager
-    aliases: lar
 
 permissions:
     logginandrun.manager:

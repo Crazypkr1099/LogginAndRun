@@ -34,7 +34,7 @@ public class FileHandler {
 			FileInputStream fis = new FileInputStream(FILENAME);
 			ObjectInputStream ois = new ObjectInputStream(fis);
 			Object hashmap = ois.readObject();
-			LogginAndRun.instance.userCommands = (ConcurrentHashMap<UUID, ArrayList<String>>) hashmap;
+			LogginAndRun.instance.userCommands = (ConcurrentHashMap<UUID, ArrayList<StoredCommand>>) hashmap;
 			ois.close();
 		}
 		catch (Exception e){
