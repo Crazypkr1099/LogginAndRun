@@ -1,4 +1,4 @@
-package com.crazypkr.logginandrun;
+package com.crazypkr.loginandrun;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -14,12 +14,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class FileHandler {
 	public static FileHandler fileHandlerInstance = new FileHandler();
 	private static final String FILENAME = "L_A_R.dat";
-	void LogginAndRunSaveData() {
+	void LoginAndRunSaveData() {
 		try{
 			
 			FileOutputStream fos = new FileOutputStream(FILENAME);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			oos.writeObject(LogginAndRun.instance.userCommands);
+			oos.writeObject(LoginAndRun.instance.userCommands);
 			oos.close();
 		}
 		catch (Exception e){
@@ -28,13 +28,13 @@ public class FileHandler {
 	}
 	
 	@SuppressWarnings("unchecked")
-	void LogginAndRunLoadData(){
+	void LoginAndRunLoadData(){
 		
 		try{
 			FileInputStream fis = new FileInputStream(FILENAME);
 			ObjectInputStream ois = new ObjectInputStream(fis);
 			Object hashmap = ois.readObject();
-			LogginAndRun.instance.userCommands = (ConcurrentHashMap<UUID, ArrayList<StoredCommand>>) hashmap;
+			LoginAndRun.instance.userCommands = (ConcurrentHashMap<UUID, ArrayList<StoredCommand>>) hashmap;
 			ois.close();
 		}
 		catch (Exception e){

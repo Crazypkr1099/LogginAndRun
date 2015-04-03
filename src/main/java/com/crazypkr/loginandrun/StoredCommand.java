@@ -1,4 +1,4 @@
-package com.crazypkr.logginandrun;
+package com.crazypkr.loginandrun;
 
 import java.io.Serializable;
 
@@ -13,6 +13,16 @@ public class StoredCommand implements Serializable {
 		this.Command = command;
 		this.enabled = enabled;
 		
+	}
+	
+	public String getStatus(){
+		
+		if(this.enabled){
+			return "Enabled";
+		}
+		else{
+			return "Disabled";
+		}
 	}
 		
 		

@@ -1,4 +1,4 @@
-package com.crazypkr.logginandrun;
+package com.crazypkr.loginandrun;
 
 import java.util.ArrayList;
 import java.util.Map;

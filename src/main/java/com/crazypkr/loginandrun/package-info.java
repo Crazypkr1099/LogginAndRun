@@ -6,4 +6,4 @@
  *
  */
 
-package com.crazypkr.logginandrun;
+package com.crazypkr.loginandrun;

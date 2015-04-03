@@ -1,24 +1,24 @@
-name: LogginAndRun
-main: com.crazypkr.logginandrun.LogginAndRun
+name: LoginAndRun
+main: com.crazypkr.loginandrun.LoginAndRun
 version: 0.1
 
 commands:
   osenable:
     description: Commands to trigger on login permissions
-    permission: logginandrun.manager
+    permission: loginandrun.manager
     aliases: os
     
   osdisable:
     description: Use this command to remove commands on start
-    permission: logginandrun.manager
+    permission: loginandrun.manager
     aliases: osremove
   
   oscommands:
     description: Use this to see list of commands ran on start
-    permission: logginandrun.manager
+    permission: loginandrun.manager
     aliases: osc
 
 permissions:
-    logginandrun.manager:
-        description: LogginAndRun manager
+    loginandrun.manager:
+        description: LoginAndRun manager
         default: op
