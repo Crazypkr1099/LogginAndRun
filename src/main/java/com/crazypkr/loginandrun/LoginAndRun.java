@@ -119,25 +119,25 @@ public final class LoginAndRun extends JavaPlugin {
 			if (cmd.getName().equalsIgnoreCase("osremove")){
 					
 				for (StoredCommand commands : cmdlist){
-					Iterator<StoredCommand> itr = cmdlist.iterator();
-					while(itr.hasNext()){
+					for (int i = 0; i < cmdlist.size(); i++){
 						if (stringArgs.equalsIgnoreCase("all")){
+							cmdlist.remove(i);
 							ifAll = true;
-							itr.remove();
 						}
+						
 						else if (stringArgs.equalsIgnoreCase(commands.Command)){
+							cmdlist.remove(i);
 							player.sendMessage(ChatColor.GRAY + "Removed " + commands.Command);
-							itr.remove();
+							break;
 						}
 					}
-					Object next = itr.next();
-					itr.remove();
-				}
 				
-				if (ifAll == true){
-					player.sendMessage(ChatColor.GRAY + "Removed All Commands");
+					if (ifAll == true){
+						player.sendMessage(ChatColor.GRAY + "Removed All Commands");
+					}
+				
+					FileHandler.fileHandlerInstance.LoginAndRunSaveData();
 				}
-				FileHandler.fileHandlerInstance.LoginAndRunSaveData();
 			}
 		}
 		return false;
