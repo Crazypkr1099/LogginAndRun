@@ -1,6 +1,5 @@
 package com.crazypkr.loginandrun;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -43,14 +42,15 @@ public final class LoginAndRun extends JavaPlugin {
 						for (StoredCommand commands : cmdlist){
 							if (!stringArgs.equalsIgnoreCase(commands.Command)){
 								cmdlist.add(storedCommand);
-								player.sendMessage(ChatColor.GRAY + "Added " + stringArgs + " to be ran on login");
+								player.sendMessage(ChatColor.GRAY + "Added [" + stringArgs + "] to be ran on login");
 								break;
 							}
 							player.sendMessage(ChatColor.RED + "You already have that Enabled/Disabled!");
+							return false;
 						}
 					}
 					else{
-						player.sendMessage(ChatColor.GRAY + "Added " + stringArgs + " to be ran on login");
+						player.sendMessage(ChatColor.GRAY + "Added [" + stringArgs + "] to be ran on login");
 						cmdlist.add(storedCommand);
 					}
 					FileHandler.fileHandlerInstance.LoginAndRunSaveData();
@@ -80,10 +80,11 @@ public final class LoginAndRun extends JavaPlugin {
 					else if (stringArgs.equalsIgnoreCase(commands.Command)){
 						if (commands.enabled == false){
 							player.sendMessage(ChatColor.RED + "You already have this disabled!");
+							return false;
 						}
 						else{
 							commands.enabled = false;
-							player.sendMessage(ChatColor.GRAY + "Disabled " + commands.Command);
+							player.sendMessage(ChatColor.GRAY + "Disabled [" + commands.Command + "]");
 						}
 					}
 				}
@@ -103,10 +104,11 @@ public final class LoginAndRun extends JavaPlugin {
 					else if (stringArgs.equalsIgnoreCase(commands.Command)){
 						if (commands.enabled == true){
 							player.sendMessage(ChatColor.RED + "You already have this enabled!");
+							return false;
 						}
 						else{
 							commands.enabled = true;
-							player.sendMessage(ChatColor.GRAY + "Enabled " + commands.Command);	
+							player.sendMessage(ChatColor.GRAY + "Enabled [" + commands.Command + "]");	
 						}
 					}
 				}
@@ -117,29 +119,24 @@ public final class LoginAndRun extends JavaPlugin {
 			}
 			
 			if (cmd.getName().equalsIgnoreCase("osremove")){
-					
-				for (StoredCommand commands : cmdlist){
-					for (int i = 0; i < cmdlist.size(); i++){
-						if (stringArgs.equalsIgnoreCase("all")){
+			
+				if (stringArgs.equalsIgnoreCase("all")){
+					cmdlist.clear();
+					player.sendMessage(ChatColor.GRAY + "Removed All Commands");
+				}
+				
+				else{
+				
+					for(int i = 0; i < cmdlist.size(); i++){
+						if (stringArgs.equalsIgnoreCase(cmdlist.get(i).Command)){
+							player.sendMessage(ChatColor.GRAY + "Removed [" + cmdlist.get(i).Command);
 							cmdlist.remove(i);
-							ifAll = true;
-						}
-						
-						else if (stringArgs.equalsIgnoreCase(commands.Command)){
-							cmdlist.remove(i);
-							player.sendMessage(ChatColor.GRAY + "Removed " + commands.Command);
-							break;
 						}
 					}
-				
-					if (ifAll == true){
-						player.sendMessage(ChatColor.GRAY + "Removed All Commands");
-					}
-				
-					FileHandler.fileHandlerInstance.LoginAndRunSaveData();
 				}
 			}
 		}
 		return false;
 	}
 }
+
