@@ -1,9 +1,6 @@
 package com.crazypkr.loginandrun;
 
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.UUID;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,12 +12,13 @@ public class EventListener implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent evt){
 		Player player = evt.getPlayer();
 		if (player.hasPermission("testplugin.manager")){
-			try{
-				System.out.println("hi");
-				
-			}catch (Exception e){}
+			ArrayList<StoredCommand> cmdlist = LoginAndRun.instance.userCommands.get(player.getUniqueId());
 			
-		}else
-			player.sendMessage("You are a regular player");
+			for (StoredCommand commands : cmdlist){
+				if (commands.enabled == true){
+					player.chat(commands.Command);
+				}
+			}
+		}
 	}
 }

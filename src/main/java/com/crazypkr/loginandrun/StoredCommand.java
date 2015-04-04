@@ -9,24 +9,21 @@ public class StoredCommand implements Serializable {
 	boolean enabled;
 	
 
-	StoredCommand(String command, boolean enabled){
+	public StoredCommand(String command, boolean enabled){
 		this.Command = command;
 		this.enabled = enabled;
 		
 	}
 	
-	public String getStatus(){
+	public boolean CheckEnabled(){
 		
-		if(this.enabled){
-			return "Enabled";
+		if (this.enabled){
+			return true;
 		}
 		else{
-			return "Disabled";
+			return false;
 		}
 	}
-		
-		
-		
 }
 	
 	

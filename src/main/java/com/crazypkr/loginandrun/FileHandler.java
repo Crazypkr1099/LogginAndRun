@@ -1,5 +1,6 @@
 package com.crazypkr.loginandrun;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -12,12 +13,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 public class FileHandler {
+	final static String larDataDirPath = "plugins" + File.separator + "LogginAndRun" + File.separator;
+	final static String larDataFilePath = larDataDirPath + "lar.dat";
 	public static FileHandler fileHandlerInstance = new FileHandler();
-	private static final String FILENAME = "L_A_R.dat";
 	void LoginAndRunSaveData() {
 		try{
-			
-			FileOutputStream fos = new FileOutputStream(FILENAME);
+			new File(larDataDirPath).mkdir();
+			FileOutputStream fos = new FileOutputStream(larDataFilePath);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(LoginAndRun.instance.userCommands);
 			oos.close();
@@ -31,7 +33,7 @@ public class FileHandler {
 	void LoginAndRunLoadData(){
 		
 		try{
-			FileInputStream fis = new FileInputStream(FILENAME);
+			FileInputStream fis = new FileInputStream(larDataFilePath);
 			ObjectInputStream ois = new ObjectInputStream(fis);
 			Object hashmap = ois.readObject();
 			LoginAndRun.instance.userCommands = (ConcurrentHashMap<UUID, ArrayList<StoredCommand>>) hashmap;
