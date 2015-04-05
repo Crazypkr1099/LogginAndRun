@@ -68,7 +68,7 @@ public final class LoginAndRun extends JavaPlugin {
 				// Else, list all commands that the user has
 				player.sendMessage(ChatColor.YELLOW + "**********************");
 				for (StoredCommand commands : cmdlist){
-					player.sendMessage(ChatColor.YELLOW + "Command: (" + commands.Command + ") IsEnabled: " + commands.CheckEnabled());
+					player.sendMessage(ChatColor.YELLOW + "Command: (" + commands.Command + ") IsEnabled: " + commands.enabled);
 				}
 				player.sendMessage(ChatColor.YELLOW + "**********************");
 			}

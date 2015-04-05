@@ -14,18 +14,7 @@ public class StoredCommand implements Serializable {
 		this.enabled = enabled;
 		
 	}
-	
-	public boolean CheckEnabled(){
-		
-		if (this.enabled){
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
 }
-	
 	
 	
 	
