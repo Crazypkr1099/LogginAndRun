@@ -9,14 +9,15 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class EventListener implements Listener {
 	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent evt){
-		Player player = evt.getPlayer();
-		if (player.hasPermission("testplugin.manager")){
+	public void onPlayerJoin(PlayerJoinEvent evt){ // Method to check player joins the server
+		Player player = evt.getPlayer(); // Get player
+		if (player.hasPermission("testplugin.manager")){ // Checks if player has permission
 			ArrayList<StoredCommand> cmdlist = LoginAndRun.instance.userCommands.get(player.getUniqueId());
+			// ^ Stores user commands data in variable cmdlist
 			
 			for (StoredCommand commands : cmdlist){
-				if (commands.enabled == true){
-					player.chat(commands.Command);
+				if (commands.enabled == true){ // If command is enabled
+					player.chat(commands.Command); // Chat the command!
 				}
 			}
 		}

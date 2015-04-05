@@ -12,17 +12,17 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 
-public class FileHandler {
+public class FileHandler { // Handles files...
 	final static String larDataDirPath = "plugins" + File.separator + "LogginAndRun" + File.separator;
 	final static String larDataFilePath = larDataDirPath + "lar.dat";
 	public static FileHandler fileHandlerInstance = new FileHandler();
 	void LoginAndRunSaveData() {
 		try{
-			new File(larDataDirPath).mkdir();
+			new File(larDataDirPath).mkdir(); // Make a directory
 			FileOutputStream fos = new FileOutputStream(larDataFilePath);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			oos.writeObject(LoginAndRun.instance.userCommands);
-			oos.close();
+			oos.writeObject(LoginAndRun.instance.userCommands); // Write to file userCommands
+			oos.close(); // Close the ObjectOutputStream
 		}
 		catch (Exception e){
 			e.printStackTrace();
@@ -35,9 +35,10 @@ public class FileHandler {
 		try{
 			FileInputStream fis = new FileInputStream(larDataFilePath);
 			ObjectInputStream ois = new ObjectInputStream(fis);
-			Object hashmap = ois.readObject();
-			LoginAndRun.instance.userCommands = (ConcurrentHashMap<UUID, ArrayList<StoredCommand>>) hashmap;
-			ois.close();
+			Object hashmap = ois.readObject(); // Read from file
+			LoginAndRun.instance.userCommands = 
+					(ConcurrentHashMap<UUID, ArrayList<StoredCommand>>) hashmap; // Add file data to userCommands
+			ois.close(); // Close the ObjectInputStream
 		}
 		catch (Exception e){
 			e.printStackTrace();
