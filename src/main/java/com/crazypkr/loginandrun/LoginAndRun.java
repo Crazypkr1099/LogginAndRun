@@ -13,10 +13,10 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class LoginAndRun extends JavaPlugin {
-	ConcurrentHashMap<UUID,ArrayList<StoredCommand>> userCommands = 
-			new ConcurrentHashMap<UUID,ArrayList<StoredCommand>>();
 	public static LoginAndRun instance;
+	ConcurrentHashMap<UUID,ArrayList<StoredCommand>> usersCommands = new ConcurrentHashMap<UUID,ArrayList<StoredCommand>>();
 	private Listener eventListener=new EventListener();
+	
 	public void onEnable() {
 		instance=this;
 		FileHandler.fileHandlerInstance.LoginAndRunLoadData();
@@ -25,116 +25,131 @@ public final class LoginAndRun extends JavaPlugin {
 		pm.registerEvents(this.eventListener, this);
 	}
 	
-
+	public void onDisable() {
+		instance=null;
+	}
+	
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
-		String stringArgs = StringUtils.join(args, " ");
-		Player player = (Player) (sender); // Initialize player method as sender
-		ArrayList<StoredCommand> cmdlist = userCommands.get(player.getUniqueId());
-		boolean ifAll = false;
-		
-		if (sender.hasPermission("loginandrun.manager")){ // If player has permisison
-			if (cmd.getName().equalsIgnoreCase("onstart")){  // If command is "onstart"
-				if (cmdlist == null){ // Checks if cmdlist is null
-					cmdlist = new ArrayList<StoredCommand>(); // create a new cmdlist
-					userCommands.put(player.getUniqueId(),cmdlist); // store the empty array
-					}
-					StoredCommand storedCommand = new StoredCommand(stringArgs, true); // Create a new command with enabled "True"
-					if (cmdlist.size() > 0) { // Checks cmdlist size
-						for (StoredCommand commands : cmdlist){
-							if (!stringArgs.equalsIgnoreCase(commands.Command)){ // If command isn't already stored for user
-								cmdlist.add(storedCommand); // Store the command
-								player.sendMessage(ChatColor.GRAY + "Added [" + stringArgs + "] to be ran on login");
-								break;
-							}
-							// If command is already stored for user
-							player.sendMessage(ChatColor.RED + "You already have that Enabled/Disabled!"); 
-							return false;
-						}
-					}
-					else{
-						player.sendMessage(ChatColor.GRAY + "Added [" + stringArgs + "] to be ran on login");
-						cmdlist.add(storedCommand); // Add the command if cmdlist < 0
-					}
-					FileHandler.fileHandlerInstance.LoginAndRunSaveData(); // Store to file
-				}
+		if (sender.hasPermission("loginandrun.manager") && cmd.getName().equalsIgnoreCase("loginandrun")){
+			if (!(sender instanceof Player)) {
+				sender.sendMessage("Console can't run this command");
+				return false;
+			}
 			
-		
-			if (cmd.getName().equalsIgnoreCase("oscommands")){ // If command is "oscommands"
-				
-				if (cmdlist == null || cmdlist.isEmpty()){ // Checks if no commands are stored
-					player.sendMessage(ChatColor.RED + "No commands set yet. use /os <cmd> to set it!");
+			if (args.length==0) {
+				sender.sendMessage("Usage: /"+label+" [add|remove|list|enable|disable]");
+				return false;
+			}
+			
+			Player player = (Player) (sender); // Initialize player method as sender
+			ArrayList<StoredCommand> playerCmds = this.usersCommands.get(player.getUniqueId());
+			if (playerCmds == null) { // Checks if cmdlist is null
+				playerCmds = new ArrayList<StoredCommand>(); // create a new cmdlist
+				this.usersCommands.put(player.getUniqueId(),playerCmds); // store the empty array
+			}
+			
+			if (args[0].equalsIgnoreCase("add")) {
+				if (args.length<2) {
+					sender.sendMessage("Usage: /"+label+" add [command]");
 					return false;
 				}
-				// Else, list all commands that the user has
+				
+				String stringArgs = StringUtils.join(args, " ");
+				StoredCommand storedCommand = new StoredCommand(stringArgs, true); // Create a new command with enabled "True"
+				
+				if (playerCmds.contains(stringArgs)) { // If command is already stored for user
+					player.sendMessage(ChatColor.RED + "You already have that Enabled/Disabled!"); 
+					return false;
+				}
+				
+				player.sendMessage(ChatColor.GRAY + "Added [" + stringArgs + "] to be ran on login");
+				playerCmds.add(storedCommand); // Add the command if cmdlist < 0
+				
+				FileHandler.fileHandlerInstance.LoginAndRunSaveData(); // Store to file
+				
+				return true;
+			}
+			
+			if (args[0].equalsIgnoreCase("remove")) {
+				if (args.length<2) {
+					sender.sendMessage("Usage: /"+label+" remove (id)");
+					return false;
+				}
+				try {
+					int i = Integer.valueOf(args[1]);
+					StoredCommand storedCommand = playerCmds.remove(i);
+					player.sendMessage(ChatColor.GRAY + "Removed [" + storedCommand.strCommand + "]");
+					return true;
+				} catch (Exception e) {
+					player.sendMessage(ChatColor.GRAY + "Invalid id");
+					return false;
+				}
+			}
+			
+			if (args[0].equalsIgnoreCase("list")) {
+				if (playerCmds.isEmpty()){ // Checks if no commands are stored
+					player.sendMessage(ChatColor.RED + "No commands set yet. Use /"+label+" add [command] to set it!");
+					return false;
+				}
+				
 				player.sendMessage(ChatColor.YELLOW + "**********************");
-				for (StoredCommand commands : cmdlist){
-					player.sendMessage(ChatColor.YELLOW + "Command: (" + commands.Command + ") IsEnabled: " + commands.enabled);
+				for(int i=0; i<playerCmds.size(); i++) {
+					StoredCommand storedCommand=playerCmds.get(i);
+					if (storedCommand.enabled){
+						player.sendMessage(ChatColor.YELLOW + "ID: "+i+" - " + storedCommand.strCommand);
+					} else {
+						player.sendMessage(ChatColor.GRAY + "ID: "+i+" - " + storedCommand.strCommand);
+					}
 				}
 				player.sendMessage(ChatColor.YELLOW + "**********************");
+				return true;
 			}
 			
-			if (cmd.getName().equalsIgnoreCase("osdisable")){ // If command is "osdisable"
-				for (StoredCommand commands : cmdlist){  
-					if (stringArgs.equalsIgnoreCase("all")){ // Checks if stringArgs is "all"
-						commands.enabled = false; // Loops to disable all commands
-						ifAll = true; 
-					}
-					else if (stringArgs.equalsIgnoreCase(commands.Command)){ // If stringArgs is equal to a command
-						if (commands.enabled == false){ // If enabled already equals false
-							player.sendMessage(ChatColor.RED + "You already have this disabled!"); 
-							return false;
-						}
-						else{
-							commands.enabled = false; // disable command
-							player.sendMessage(ChatColor.GRAY + "Disabled [" + commands.Command + "]");
-						}
-					}
+			if (args[0].equalsIgnoreCase("enable")) {
+				if (args.length<2) {
+					sender.sendMessage("Usage: /"+label+" enable (id|all)");
+					return false;
 				}
 				
-				if (ifAll == true){
-					player.sendMessage(ChatColor.GRAY + "Disabled All Commands");
+				if (args[1].equalsIgnoreCase("all")) {
+					for(StoredCommand storedCommand : playerCmds) {
+						storedCommand.enabled=true;
+					}
+					return true;
 				}
-				FileHandler.fileHandlerInstance.LoginAndRunSaveData(); // Store data
+				
+				try {
+					int i = Integer.valueOf(args[1]);
+					StoredCommand storedCommand = playerCmds.get(i);
+					storedCommand.enabled=true;
+					player.sendMessage(ChatColor.GRAY + "Enabled [" + storedCommand.strCommand + "]");
+					return true;
+				} catch (Exception e) {
+					player.sendMessage(ChatColor.GRAY + "Invalid id");
+					return false;
+				}
 			}
 			
-			if (cmd.getName().equalsIgnoreCase("osenable")){ // If command is "osenable"
-				for (StoredCommand commands : cmdlist){ 
-					if (stringArgs.equalsIgnoreCase("all")){ // Check if stringArgs is equal to "all"
-						commands.enabled = true; // Enable all commands
-						ifAll = true;
-					}
-					else if (stringArgs.equalsIgnoreCase(commands.Command)){
-						if (commands.enabled == true){ // If already enabled
-							player.sendMessage(ChatColor.RED + "You already have this enabled!");
-							return false;
-						}
-						else{
-							commands.enabled = true; // Enable command
-							player.sendMessage(ChatColor.GRAY + "Enabled [" + commands.Command + "]");	
-						}
-					}
+			if (args[0].equalsIgnoreCase("disable")) {
+				if (args.length<2) {
+					sender.sendMessage("Usage: /"+label+" disable (id|all)");
+					return false;
 				}
-				if (ifAll == true){
-					player.sendMessage(ChatColor.GRAY + "Enabled All Commands");
-				}
-				FileHandler.fileHandlerInstance.LoginAndRunSaveData(); // Store data
-			}
-			
-			if (cmd.getName().equalsIgnoreCase("osremove")){ // If command is "osremove"
-			
-				if (stringArgs.equalsIgnoreCase("all")){ // Check if stringArgs is equal to "all"
-					cmdlist.clear(); //clear players command data
-					player.sendMessage(ChatColor.GRAY + "Removed All Commands");
-				}
-				
-				else{
-				
-					for(int i = 0; i < cmdlist.size(); i++){ // Loops players command data
-						if (stringArgs.equalsIgnoreCase(cmdlist.get(i).Command)){ // If command is equal to stringArgs
-							player.sendMessage(ChatColor.GRAY + "Removed [" + cmdlist.get(i).Command);
-							cmdlist.remove(i); // Remove command
-						}
+				if (args[1].equalsIgnoreCase("all")) {
+					for(StoredCommand storedCommand : playerCmds) {
+						storedCommand.enabled=false;
 					}
+					return true;
+				}
+				try {
+					int i = Integer.valueOf(args[1]);
+					StoredCommand storedCommand = playerCmds.get(i);
+					storedCommand.enabled=false;
+					player.sendMessage(ChatColor.GRAY + "Disabled [" + storedCommand.strCommand + "]");
+					return true;
+				} catch (Exception e) {
+					player.sendMessage(ChatColor.GRAY + "Invalid id");
+					return false;
 				}
 			}
 		}

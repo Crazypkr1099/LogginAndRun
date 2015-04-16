@@ -1,29 +1,11 @@
 name: LoginAndRun
 main: com.crazypkr.loginandrun.LoginAndRun
-version: 0.1
+version: 1.0
 
 commands:
-  onstart:
-    description: Allows players to run commands on login
-    permission: loginandrun.manager
-    aliases: os
-    
-  osdisable:
-    description: Disables a command to be ran on login
-    permission: loginandrun.manager
-  
-  osenable:
-    description: Enables a command to be ran on login
-    permission: loginandrun.manager
-    
-  osremove:
-    description: Remove a command from the list of commands to be ran on login
-    permission: loginandrun.manager
-    
-  oscommands:
-    description: Lists all commands enabled/disabled on login
-    permission: loginandrun.manager
-    aliases: osc
+  loginandrun:
+    description: Main command
+    aliases: lar
 
 permissions:
     loginandrun.manager:
