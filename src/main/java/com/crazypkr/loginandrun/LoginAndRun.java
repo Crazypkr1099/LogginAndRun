@@ -54,12 +54,14 @@ public final class LoginAndRun extends JavaPlugin {
 					return false;
 				}
 				
-				String stringArgs = StringUtils.join(args, " ");
+				String stringArgs = mergeStringArrayFromIndex(args, 1);
 				StoredCommand storedCommand = new StoredCommand(stringArgs, true); // Create a new command with enabled "True"
 				
-				if (playerCmds.contains(stringArgs)) { // If command is already stored for user
-					player.sendMessage(ChatColor.RED + "You already have that Enabled/Disabled!"); 
-					return false;
+				for (StoredCommand command : playerCmds){
+					if (command.strCommand.equalsIgnoreCase(stringArgs)){
+						player.sendMessage(ChatColor.RED + "You already have that Enabled/Disabled!");
+						return false;
+					}
 				}
 				
 				player.sendMessage(ChatColor.GRAY + "Added [" + stringArgs + "] to be ran on login");
@@ -154,6 +156,20 @@ public final class LoginAndRun extends JavaPlugin {
 			}
 		}
 		return false;
+	}
+	
+	static String mergeStringArrayFromIndex(String[] arrayString, int i) {
+        StringBuilder sb = new StringBuilder();
+       
+        for(;i<arrayString.length;i++){
+                sb.append(arrayString[i]);
+                sb.append(' ');
+        }
+       
+        if (sb.length()!=0) {
+                sb.deleteCharAt(sb.length()-1);
+        }
+        return sb.toString();
 	}
 }
 
